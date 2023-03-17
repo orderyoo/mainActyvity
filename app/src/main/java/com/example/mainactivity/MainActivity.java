@@ -7,14 +7,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+    private static final String KEY_COUNT = "counter";
     public static final String TAG = "StartActivity";
-    private Integer count = 5;
+    private Integer counter = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         Toast.makeText(this, "onCreate()", Toast.LENGTH_LONG).show();
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_COUNT, counter);
+        Log.d(TAG, "onSaveInstanceState");
+        Toast.makeText(this, "onSaveInstanceState()", Toast.LENGTH_LONG).show();
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        counter = savedInstanceState.getInt(KEY_COUNT);
+        TextView text = findViewById(R.id.txt_counter);
+        text.setText(counter.toString());
+        Log.d(TAG, "onRestoreInstanceState");
+        Toast.makeText(this, "onRestoreInstanceState()", Toast.LENGTH_LONG).show();
+    }
+    public void Click (View view){
+        counter++;
+        TextView text = (TextView)findViewById(R.id.txt_counter);
+        text.setText(counter.toString());
+    }
+    public void onClickButton (View view){
+        counter = 0;
+        TextView text = findViewById(R.id.txt_counter);
+        text.setText(counter.toString());
     }
     @Override
     protected void onStart() {
@@ -52,22 +79,6 @@ public class MainActivity extends Activity {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
         Toast.makeText(this, "onDestroy()", Toast.LENGTH_LONG).show();
-    }
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("count", count);
-        Log.d(TAG, "onSaveInstanceState");
-        Toast.makeText(this, "onSaveInstanceState()", Toast.LENGTH_LONG).show();
-    }
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState != null &&
-                savedInstanceState.containsKey("count")) {
-            count = savedInstanceState.getInt("count");
-        }
-        Log.d(TAG, "onRestoreInstanceState");
-        Toast.makeText(this, "onRestoreInstanceState()", Toast.LENGTH_LONG).show();
     }
     private void resetUI() {
         ((TextView) findViewById(R.id.txt_counter)).setText(count.toString());
